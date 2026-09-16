@@ -1,0 +1,47 @@
+import numpy as np
+
+# AND gate data
+X = np.array([
+    [0, 0],
+    [0, 1],
+    [1, 0],
+    [1, 1]
+])
+
+Y = np.array([0, 0, 0, 1])
+
+learning_rate = 0.2
+
+weights = np.array([0.3, 0.1])
+bias = 0
+
+
+def step(x):
+    return 1 if x > 0 else 0
+
+
+print("Input\tNet\tOutput\tError\tUpdated Weights\tBias")
+
+for x, target in zip(X, Y):
+
+    net = np.dot(x, weights) + bias
+    output = step(net)
+
+    error = target - output
+
+    weights = weights + learning_rate * error * x
+    bias = bias + learning_rate * error
+
+    print(
+        x,
+        "\t",
+        round(net, 2),
+        "\t",
+        output,
+        "\t",
+        error,
+        "\t",
+        weights,
+        "\t",
+        round(bias, 2)
+    )
