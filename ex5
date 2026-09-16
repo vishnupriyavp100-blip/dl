@@ -1,0 +1,37 @@
+import numpy as np
+
+X = np.array([
+    [0, 0],
+    [0, 1],
+    [1, 0],
+    [1, 1]
+])
+
+weights = np.array([1, 1])
+bias = -0.5
+
+
+def step(x):
+    return 1 if x > 0 else 0
+
+
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
+
+def relu(x):
+    return max(0, x)
+
+print("X1 X2\tNet\tStep\tSigmoid\tReLU")
+
+for x in X:
+    net = np.dot(x, weights) + bias
+
+    step_output = step(net)
+    sigmoid_output = sigmoid(net)
+    relu_output = relu(net)
+
+    print(x[0], x[1], "\t",
+          round(net, 2), "\t",
+          step_output, "\t",
+          round(sigmoid_output, 3), "\t",
+          round(relu_output, 3))
