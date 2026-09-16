@@ -1,0 +1,93 @@
+import numpy as np
+import tensorflow as tf
+import matplotlib.pyplot as plt
+
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+from sklearn.model_selection import train_test_split
+from sklearn.datasets import make_moons
+
+np.random.seed(42)
+tf.random.set_seed(42)
+
+X, Y = make_moons(
+    n_samples=1000,
+    noise=0.2,
+    random_state=42
+)
+
+X_train, X_val, Y_train, Y_val = train_test_split(
+    X, Y,
+    test_size=0.2,
+    random_state=42
+)
+
+epoch_values = [10, 30, 50, 100]
+
+train_accuracy = []
+val_accuracy = []
+val_loss = []
+
+for epochs in epoch_values:
+
+    model = Sequential([
+        Dense(8, input_dim=2, activation='relu'),
+        Dense(1, activation='sigmoid')
+    ])
+
+    model.compile(
+        optimizer='adam',
+        loss='binary_crossentropy',
+        metrics=['accuracy']
+    )
+
+    history = model.fit(
+        X_train,
+        Y_train,
+        epochs=epochs,
+        validation_data=(X_val, Y_val),
+        verbose=0
+    )
+
+    train_accuracy.append(history.history['accuracy'][-1])
+    val_accuracy.append(history.history['val_accuracy'][-1])
+    val_loss.append(history.history['val_loss'][-1])
+
+
+# Accuracy plot
+plt.figure(figsize=(7, 5))
+plt.plot(epoch_values, train_accuracy, marker='o', label='Training Accuracy')
+plt.plot(epoch_values, val_accuracy, marker='o', label='Validation Accuracy')
+
+plt.xlabel("Number of Epochs")
+plt.ylabel("Accuracy")
+plt.title("Effect of Epochs on Accuracy")
+plt.legend()
+plt.grid()
+plt.show()
+
+
+# Loss plot
+plt.figure(figsize=(7, 5))
+plt.plot(epoch_values, val_loss, marker='o', label='Validation Loss')
+
+plt.xlabel("Number of Epochs")
+plt.ylabel("Loss")
+plt.title("Effect of Epochs on Loss")
+plt.legend()
+plt.grid()
+plt.show()
+
+
+print("Epochs\tTrain Accuracy\tValidation Accuracy\tValidation Loss")
+
+for i in range(len(epoch_values)):
+    print(
+        epoch_values[i],
+        "\t",
+        round(train_accuracy[i], 4),
+        "\t\t",
+        round(val_accuracy[i], 4),
+        "\t\t",
+        round(val_loss[i], 4)
+    )
