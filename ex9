@@ -1,0 +1,38 @@
+import numpy as np
+
+X = np.array([
+    [0, 0],
+    [0, 1],
+    [1, 0],
+    [1, 1]
+])
+
+y = np.array([0, 1, 1, 0])
+
+weights = np.array([0.0, 0.0])
+bias = 0.0
+learning_rate = 0.1
+
+for epoch in range(20):
+
+    total_error = 0
+
+    for i in range(len(X)):
+
+        net = np.dot(X[i], weights) + bias
+        output = 1 if net >= 0 else 0
+
+        error = y[i] - output
+
+        weights += learning_rate * error * X[i]
+        bias += learning_rate * error
+
+        total_error += abs(error)
+
+print("Final weights:", weights)
+print("Final bias:", bias)
+
+for x in X:
+    net = np.dot(x, weights) + bias
+    output = 1 if net >= 0 else 0
+    print(x, "->", output)
